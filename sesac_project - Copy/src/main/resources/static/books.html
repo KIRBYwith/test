@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>도서 목록 - KIRBY 도서관</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v=20250118borrow">
+    <script src="/js/numberFormatter.js?v=20250118update"></script>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -12,12 +13,14 @@
             padding: 0;
         }
         header {
-            background: #fff;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.9), rgba(255, 235, 179, 0.9)) !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: 0 8px 32px rgba(255, 179, 217, 0.3) !important;
+            padding: 1.5rem 0 !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+            border-bottom: 3px solid rgba(255, 179, 217, 0.3) !important;
         }
         nav a {
             margin: 0 1rem;
@@ -106,13 +109,15 @@
 </head>
 <body>
 <header>
-    <h1>📖KIRBY 도서관📖</h1>
+    <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
     <nav>
         <a href="index.html">홈</a>
-        <a href="books.html">도서목록</a>
-        <a href="mypage.html" id="myPageBtn" style="display:none;">마이페이지</a>
         <a href="login.html" id="loginBtn">로그인</a>
         <a href="signup.html" id="signupBtn">회원가입</a>
+        <a href="books.html">도서목록</a>
+        <a href="board.html">게시판</a>
+        <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
+        <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
     </nav>
 </header>
 
@@ -144,25 +149,49 @@
     s.src = '/js/state.js';
     document.head.appendChild(s);
 
-    // 로그인 상태
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    const myPageBtn = document.getElementById('myPageBtn');
-    const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
+    // 로그인 상태 관리
+    document.addEventListener('DOMContentLoaded', function () {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-    if (isLoggedIn) {
-        myPageBtn.style.display = 'inline-block';
-        loginBtn.textContent = '로그아웃';
-        loginBtn.href = '#';
-        loginBtn.addEventListener('click', e => {
-            e.preventDefault();
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('user');
-            alert('로그아웃 되었습니다.');
-            window.location.reload();
-        });
-        if (signupBtn) signupBtn.style.display = 'none';
-    }
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mypageBtn = document.getElementById('mypageBtn');
+        const adminBtn = document.getElementById('adminBtn');
+
+        if (isLoggedIn && user) {
+            // 로그인 상태면 로그인 → 로그아웃으로 바꿈
+            loginBtn.textContent = '로그아웃';
+            loginBtn.href = '#';
+            loginBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
+                alert('로그아웃 되었습니다.');
+                window.location.reload();
+            });
+
+            // 회원가입 버튼 숨기기
+            if (signupBtn) signupBtn.style.display = 'none';
+
+            // 마이페이지 버튼 보이기
+            if (mypageBtn) mypageBtn.style.display = 'inline-block';
+
+            // 관리자 계정인 경우 관리자페이지 버튼 보이기
+            if (user.role === 'ADMIN') {
+                if (adminBtn) adminBtn.style.display = 'inline-block';
+            }
+        } else {
+            // 로그인 상태가 아니면 로그인 버튼을 login.html로 연결
+            if (loginBtn) {
+                loginBtn.href = 'login.html';
+            }
+            
+            // 마이페이지, 관리자페이지 버튼 숨기기
+            if (mypageBtn) mypageBtn.style.display = 'none';
+            if (adminBtn) adminBtn.style.display = 'none';
+        }
+    });
 
     // CSV 데이터 → JS 배열
     const books = [
@@ -202,6 +231,7 @@
 
     function renderBooks() {
         const user = JSON.parse(localStorage.getItem('user') || 'null');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
         const state = (window.State && State.getBookState()) || {};
         const category = categoryFilter.value;
         const search = searchInput.value.toLowerCase();

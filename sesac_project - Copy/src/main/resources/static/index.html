@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>KIRBY 도서관</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v=20250118book">
+    <link rel="stylesheet" href="/css/library-enhanced.css?v=20250118library">
+    <script src="/js/numberFormatter.js?v=20250118update"></script>
 </head>
 <body>
 <header>
-    <h1>📖KIRBY 도서관📖</h1>
+    <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
     <nav>
         <a href="index.html">홈</a>
         <a href="login.html" id="loginBtn">로그인</a>
@@ -20,152 +25,325 @@
     </nav>
 </header>
 
-<!-- 슬라이드 배너 -->
-<div class="banner-container">
+<!-- 메인 배너 슬라이드 -->
+<div class="hero-banner">
     <div class="banner-slides">
+        <!-- 첫 번째 슬라이드: 환영 메시지 -->
         <div class="banner-slide active">
-            <div class="banner-content">
-                <h3>커비와 함께하는 도서관</h3>
-                <p>우리와 함께, 책읽는 커비가 되어주세요</p>
-                <div class="banner-main-image">
-                    <img src="../img/kirby_lib_banner.png" alt="커비 도서관 측면 사진">
+            <div class="slide-bg" style="background-image: url('/img/kirby_lib_banner.png');"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>🌟 KIRBY 도서관에 오신 것을 환영합니다! 🌟</h2>
+                    <p>책과 함께하는 특별한 여행을 시작해보세요</p>
+                    <div class="slide-buttons">
+                        <a href="books.html" class="btn-primary">📚 도서 둘러보기</a>
+                        <a href="signup.html" class="btn-secondary">👤 회원가입</a>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- 두 번째 슬라이드: 추천 도서 -->
         <div class="banner-slide">
-            <p>최신 베스트셀러와 추천 도서들을 만나보세요</p>
-            <div class="banner-images">
-                <img src="../img/1.jpg" alt="신착 도서 1">
-                <img src="../img/2.jpg" alt="신착 도서 2">
-                <img src="../img/3.jpg" alt="신착 도서 3">
-                <img src="../img/4.jpg" alt="신착 도서 4">
+            <div class="slide-bg" style="background-image: linear-gradient(rgba(255,179,217,0.8), rgba(255,235,179,0.8));"></div>
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>📖 이번 주 추천 도서</h2>
+                    <p>독서의 즐거움을 느껴보세요</p>
+                    <div class="featured-books-mini">
+                        <div class="mini-book">
+                            <img src="/img/1.jpg" alt="미드나이트 라이브러리">
+                            <span>미드나이트 라이브러리</span>
+                        </div>
+                        <div class="mini-book">
+                            <img src="/img/2.jpg" alt="아몬드">
+                            <span>아몬드</span>
+                        </div>
+                        <div class="mini-book">
+                            <img src="/img/3.jpg" alt="사피엔스">
+                            <span>사피엔스</span>
+                        </div>
+                        <div class="mini-book">
+                            <img src="/img/4.jpg" alt="코스모스">
+                            <span>코스모스</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- 세 번째 슬라이드: 서비스 안내 -->
         <div class="banner-slide">
-            <div class="banner-content">
-                <h3>독서 프로그램 운영 중</h3>
-                <p>다양한 독서 활동에 참여하고 혜택을 받아보세요</p>
+            <div class="slide-bg" style="background-image: linear-gradient(rgba(255,192,203,0.8), rgba(255,235,179,0.8));"></div>
+            <div class="slide-content">
+                <div class="slide-text">
+                    <h2>🏛️ 다양한 도서관 서비스</h2>
+                    <p>독서 프로그램, 열람실, 전자도서 등 다양한 서비스를 제공합니다</p>
+                    <div class="service-features">
+                        <div class="service-item">
+                            <span class="service-icon">📚</span>
+                            <span>도서 대출</span>
+                        </div>
+                        <div class="service-item">
+                            <span class="service-icon">💻</span>
+                            <span>전자도서</span>
+                        </div>
+                        <div class="service-item">
+                            <span class="service-icon">🏫</span>
+                            <span>열람실</span>
+                        </div>
+                        <div class="service-item">
+                            <span class="service-icon">🎯</span>
+                            <span>독서프로그램</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <button class="banner-nav prev" onclick="prevSlide()">‹</button>
-    <button class="banner-nav next" onclick="nextSlide()">›</button>
+
+    <!-- 네비게이션 버튼 -->
+    <button class="banner-nav prev">‹</button>
+    <button class="banner-nav next">›</button>
+    
+    <!-- 인디케이터 -->
     <div class="banner-indicators">
-        <span class="indicator active" onclick="currentSlide(1)"></span>
-        <span class="indicator" onclick="currentSlide(2)"></span>
-        <span class="indicator" onclick="currentSlide(3)"></span>
+        <span class="indicator active"></span>
+        <span class="indicator"></span>
+        <span class="indicator"></span>
     </div>
 </div>
 
-<div class="search-box">
-    <input type="text" id="searchInput" placeholder="도서명, 저자, 키워드 검색">
-    <button id="searchBtn">검색</button>
+<!-- 메인 검색 섹션 -->
+<section class="main-search-section">
+    <div class="search-container">
+        <h2 class="search-title">📚 원하는 도서를 찾아보세요</h2>
+        <div class="search-box-enhanced">
+            <div class="search-input-group">
+                <input type="text" id="searchInput" placeholder="도서명, 저자, 키워드로 검색하세요">
+                <button id="searchBtn" class="search-btn">
+                    <span class="search-icon">🔍</span>
+                    <span class="search-text">검색</span>
+                </button>
+            </div>
+            <div class="search-filters">
+                <button class="filter-btn active" data-filter="all">전체</button>
+                <button class="filter-btn" data-filter="book">도서</button>
+                <button class="filter-btn" data-filter="author">저자</button>
+                <button class="filter-btn" data-filter="keyword">키워드</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 메인 컨텐츠 영역 -->
+<div class="main-content">
+    <!-- 왼쪽 컬럼 -->
+    <div class="content-left">
+        <!-- 도서관 서비스 -->
+        <div class="card service-card">
+            <h2>🏛️ 도서관 서비스</h2>
+            <div class="service-grid">
+                <div class="service-item-large">
+                    <div class="service-icon-large">📚</div>
+                    <div class="service-content">
+                        <h3>도서 대출/반납</h3>
+                        <p>일반도서 14일, 연장 가능</p>
+                        <a href="books.html" class="service-link">바로가기 →</a>
+                    </div>
+                </div>
+                <div class="service-item-large">
+                    <div class="service-icon-large">🏫</div>
+                    <div class="service-content">
+                        <h3>열람실 이용</h3>
+                        <p>개인/그룹 열람실 예약</p>
+                        <a href="#study-room" class="service-link">예약하기 →</a>
+                    </div>
+                </div>
+                <div class="service-item-large">
+                    <div class="service-icon-large">💻</div>
+                    <div class="service-content">
+                        <h3>전자도서</h3>
+                        <p>온라인 도서 열람 서비스</p>
+                        <a href="#ebook" class="service-link">이용하기 →</a>
+                    </div>
+                </div>
+                <div class="service-item-large">
+                    <div class="service-icon-large">🎯</div>
+                    <div class="service-content">
+                        <h3>독서 프로그램</h3>
+                        <p>독서모임, 문화행사 참여</p>
+                        <a href="#program" class="service-link">신청하기 →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 이달의 추천 도서 -->
+        <div class="card featured-books-card">
+            <h2>📖 이달의 추천 도서</h2>
+            <div class="featured-books-grid">
+                <div class="featured-book">
+                    <div class="book-rank">🏆</div>
+                    <div class="book-info">
+                        <h3>"당신의 선택"</h3>
+                        <p class="book-author">김영하 저</p>
+                        <p class="book-desc">인생의 중요한 순간에 대한 깊이 있는 성찰</p>
+                    </div>
+                </div>
+                <div class="featured-book">
+                    <div class="book-rank">🔥</div>
+                    <div class="book-info">
+                        <h3>"미드나이트 라이브러리"</h3>
+                        <p class="book-author">맷 헤이그 저</p>
+                        <p class="book-desc">삶의 의미를 되돌아보게 하는 감동적인 이야기</p>
+                    </div>
+                </div>
+                <div class="featured-book">
+                    <div class="book-rank">✨</div>
+                    <div class="book-info">
+                        <h3>"코스모스"</h3>
+                        <p class="book-author">칼 세이건 저</p>
+                        <p class="book-desc">우주에 대한 경이로운 탐험</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 오른쪽 컬럼 -->
+    <div class="content-right">
+        <!-- 공지사항 및 이벤트 -->
+        <div class="card notice-card">
+            <h2>📢 공지사항 & 이벤트</h2>
+            <div class="notice-list">
+                <div class="notice-item urgent">
+                    <div class="notice-badge">긴급</div>
+                    <div class="notice-content">
+                        <h3>신착 도서 입고 안내</h3>
+                        <p>2025년 1월 신착 도서 500여 권이 입고되었습니다.</p>
+                        <span class="notice-date">2025.01.18</span>
+                    </div>
+                </div>
+                <div class="notice-item event">
+                    <div class="notice-badge">이벤트</div>
+                    <div class="notice-content">
+                        <h3>겨울 독서 챌린지</h3>
+                        <p>독서 인증하고 선물 받아가세요!</p>
+                        <span class="notice-date">2025.01.15</span>
+                    </div>
+                </div>
+                <div class="notice-item info">
+                    <div class="notice-badge">안내</div>
+                    <div class="notice-content">
+                        <h3>휴관일 변경 안내</h3>
+                        <p>매월 첫째, 셋째 월요일 휴관</p>
+                        <span class="notice-date">2025.01.10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 빠른 메뉴 -->
+        <div class="card quick-menu-card">
+            <h2>🔗 빠른 메뉴</h2>
+            <div class="quick-menu">
+                <a href="#reservation" class="menu-item">
+                    <div class="menu-icon">📚</div>
+                    <div class="menu-text">도서예약</div>
+                </a>
+                <a href="#extend" class="menu-item">
+                    <div class="menu-icon">🔄</div>
+                    <div class="menu-text">대출연장</div>
+                </a>
+                <a href="#recommend" class="menu-item">
+                    <div class="menu-icon">⭐</div>
+                    <div class="menu-text">추천도서</div>
+                </a>
+                <a href="#study" class="menu-item">
+                    <div class="menu-icon">🏫</div>
+                    <div class="menu-text">열람실예약</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 도서관 현황 -->
+        <div class="card stats-card">
+            <h2>📊 도서관 현황</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number pulse">125,847</span>
+                    <div class="stat-label">보유 도서</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number pulse">3,421</span>
+                    <div class="stat-label">등록 회원</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number pulse">892</span>
+                    <div class="stat-label">오늘 방문자</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number pulse">45</span>
+                    <div class="stat-label">현재 이용자</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="container">
-    <div class="card">
-        <h2>📢 도서관 공지사항</h2>
-        <ul>
-            <li>[공지] 신착 도서 입고 안내 - 2025.09.09</li>
-            <li>[공지] 도서관 시설 개선 공사 안내</li>
-            <li>[이벤트] 여름 독서 챌린지 진행 중</li>
-            <li>[안내] 휴관일 변경 안내</li>
-            <li>[공지] 모바일 앱 서비스 오픈</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>🔗 빠른 메뉴</h2>
-        <div class="quick-menu">
-            <a href="#reservation" class="menu-item">
-                <div class="menu-icon">📚</div>
-                <div class="menu-text">도서예약</div>
-            </a>
-            <a href="#extend" class="menu-item">
-                <div class="menu-icon">🔄</div>
-                <div class="menu-text">대출연장</div>
-            </a>
-            <a href="#recommend" class="menu-item">
-                <div class="menu-icon">⭐</div>
-                <div class="menu-text">추천도서</div>
-            </a>
-            <a href="#study" class="menu-item">
-                <div class="menu-icon">🏫</div>
-                <div class="menu-text">열람실예약</div>
-            </a>
+<!-- 하단 정보 섹션 -->
+<section class="info-section">
+    <div class="info-container">
+        <div class="info-card">
+            <h3>🕒 이용 안내</h3>
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="info-label">운영시간:</span>
+                    <span class="info-value">평일 09:00 - 22:00</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">주말:</span>
+                    <span class="info-value">09:00 - 18:00</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">휴관일:</span>
+                    <span class="info-value">매월 첫째, 셋째 월요일</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">대출기간:</span>
+                    <span class="info-value">일반도서 14일</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">연락처:</span>
+                    <span class="info-value">02-1234-5678</span>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="card">
-        <h2>📊 도서관 현황</h2>
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-number pulse">125,847</span>
-                <div class="stat-label">보유 도서</div>
+        <div class="info-card">
+            <h3>🎯 인기 검색어</h3>
+            <div class="search-rankings">
+                <div class="search-rank rank-1">1. 미드나이트 라이브러리</div>
+                <div class="search-rank rank-2">2. 원피스</div>
+                <div class="search-rank rank-3">3. 파이썬 프로그래밍</div>
+                <div class="search-rank">4. 아몬드</div>
+                <div class="search-rank">5. 데미안</div>
             </div>
-            <div class="stat-item">
-                <span class="stat-number pulse">3,421</span>
-                <div class="stat-label">등록 회원</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number pulse">892</span>
-                <div class="stat-label">오늘 방문자</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number pulse">45</span>
-                <div class="stat-label">현재 이용자</div>
+        </div>
+
+        <div class="info-card">
+            <h3>📍 찾아오시는 길</h3>
+            <div class="location-info">
+                <p><strong>주소:</strong> 서울시 강남구 도서관로 123</p>
+                <p><strong>지하철:</strong> 2호선 강남역 3번 출구 도보 5분</p>
+                <p><strong>버스:</strong> 146, 740, 341번 도서관 정류장</p>
+                <a href="#map" class="map-link">지도 보기 →</a>
             </div>
         </div>
     </div>
-
-    <div class="card">
-        <h2>📖 이달의 추천 도서</h2>
-        <ul>
-            <li class="book-item">🏆 "당신의 선택" - 김영하 저</li>
-            <li class="book-item">🔥 "미드나이트 라이브러리" - 맷 헤이그 저</li>
-            <li class="book-item">✨ "코스모스" - 칼 세이건 저</li>
-            <li class="book-item">💝 "아몬드" - 손원평 저</li>
-            <li class="book-item">🌟 "사피엔스" - 유발 하라리 저</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>🕒 이용 안내</h2>
-        <div class="info-list">
-            <div class="info-item">
-                <span class="info-label">운영시간:</span>
-                <span class="info-value">평일 09:00 - 22:00</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">주말:</span>
-                <span class="info-value">09:00 - 18:00</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">휴관일:</span>
-                <span class="info-value">매월 첫째, 셋째 월요일</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">대출기간:</span>
-                <span class="info-value">일반도서 14일</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">연락처:</span>
-                <span class="info-value">02-1234-5678</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>🎯 인기 검색어</h2>
-        <ul>
-            <li class="search-rank rank-1">1. 미드나이트 라이브러리</li>
-            <li class="search-rank rank-2">2. 원피스</li>
-            <li class="search-rank rank-3">3. 파이썬 프로그래밍</li>
-            <li class="search-rank">4. 아몬드</li>
-            <li class="search-rank">5. 데미안</li>
-        </ul>
-    </div>
-</div>
+</section>
 
 <footer>
     <div class="footer-content">
@@ -207,7 +385,12 @@
                 if (adminBtn) adminBtn.style.display = 'inline-block';
             }
         } else {
-            // 로그인 상태가 아니면 마이페이지, 관리자페이지 버튼 숨기기
+            // 로그인 상태가 아니면 로그인 버튼을 login.html로 연결
+            if (loginBtn) {
+                loginBtn.href = 'login.html';
+            }
+            
+            // 마이페이지, 관리자페이지 버튼 숨기기
             if (mypageBtn) mypageBtn.style.display = 'none';
             if (adminBtn) adminBtn.style.display = 'none';
         }
@@ -242,8 +425,17 @@
         showSlide(index - 1);
     }
 
-    // 자동 슬라이드 (선택사항)
+    // 자동 슬라이드 (5초마다)
     setInterval(nextSlide, 5000);
+
+    // 화살표 버튼 이벤트
+    document.querySelector('.banner-nav.prev')?.addEventListener('click', prevSlide);
+    document.querySelector('.banner-nav.next')?.addEventListener('click', nextSlide);
+
+    // 인디케이터 클릭 이벤트
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => showSlide(index));
+    });
 
     // 검색 기능
     document.getElementById('searchBtn').addEventListener('click', function() {
@@ -259,6 +451,36 @@
             document.getElementById('searchBtn').click();
         }
     });
+
+    // 검색 필터 기능
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // 모든 필터 버튼에서 active 클래스 제거
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            // 클릭된 버튼에 active 클래스 추가
+            this.classList.add('active');
+            
+            // 필터에 따른 검색어 placeholder 변경
+            const filter = this.dataset.filter;
+            const searchInput = document.getElementById('searchInput');
+            
+            switch(filter) {
+                case 'book':
+                    searchInput.placeholder = '도서명으로 검색하세요';
+                    break;
+                case 'author':
+                    searchInput.placeholder = '저자명으로 검색하세요';
+                    break;
+                case 'keyword':
+                    searchInput.placeholder = '키워드로 검색하세요';
+                    break;
+                default:
+                    searchInput.placeholder = '도서명, 저자, 키워드로 검색하세요';
+            }
+        });
+    });
+
+
 </script>
 
 </body>

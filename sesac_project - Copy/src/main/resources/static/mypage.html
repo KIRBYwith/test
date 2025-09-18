@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마이페이지 - KIRBY 도서관</title>
-    <link rel="stylesheet" href="/css/style.css"> <!-- index.html과 동일하게 외부 CSS 참조 -->
+    <link rel="stylesheet" href="/css/style.css?v=20250118update"> <!-- index.html과 동일하게 외부 CSS 참조 -->
 
     <style>
         body {
@@ -114,10 +114,15 @@
 </head>
 <body>
 <header>
-    <h1>📖KIRBY 도서관📖</h1>
+    <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
     <nav>
         <a href="index.html">홈</a>
+        <a href="login.html" id="loginBtn">로그인</a>
+        <a href="signup.html" id="signupBtn">회원가입</a>
         <a href="books.html">도서목록</a>
+        <a href="board.html">게시판</a>
+        <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
+        <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
     </nav>
 </header>
 
@@ -238,6 +243,50 @@
     }
 
     renderTable();
+
+    // 로그인 상태 관리
+    document.addEventListener('DOMContentLoaded', function () {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mypageBtn = document.getElementById('mypageBtn');
+        const adminBtn = document.getElementById('adminBtn');
+
+        if (isLoggedIn && user) {
+            // 로그인 상태면 로그인 → 로그아웃으로 바꿈
+            loginBtn.textContent = '로그아웃';
+            loginBtn.href = '#';
+            loginBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
+                alert('로그아웃 되었습니다.');
+                window.location.href = 'index.html';
+            });
+
+            // 회원가입 버튼 숨기기
+            if (signupBtn) signupBtn.style.display = 'none';
+
+            // 마이페이지 버튼 보이기
+            if (mypageBtn) mypageBtn.style.display = 'inline-block';
+
+            // 관리자 계정인 경우 관리자페이지 버튼 보이기
+            if (user.role === 'ADMIN') {
+                if (adminBtn) adminBtn.style.display = 'inline-block';
+            }
+        } else {
+            // 로그인 상태가 아니면 로그인 버튼을 login.html로 연결
+            if (loginBtn) {
+                loginBtn.href = 'login.html';
+            }
+            
+            // 마이페이지, 관리자페이지 버튼 숨기기
+            if (mypageBtn) mypageBtn.style.display = 'none';
+            if (adminBtn) adminBtn.style.display = 'none';
+        }
+    });
 </script>
 </body>
 </html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIRBY 도서관 - 회원가입</title>
+    <link rel="stylesheet" href="/css/style.css?v=20250118update">
     <style>
         * {
             margin: 0;
@@ -19,13 +20,16 @@
             line-height: 1.6;
         }
 
-        /* 헤더 */
+        /* 헤더 오버라이드 - 통일된 스타일 사용 */
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 4px 30px rgba(255, 192, 203, 0.2);
-            padding: 1.5rem 0;
-            border-bottom: 3px solid #ffb3d9;
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.9), rgba(255, 235, 179, 0.9)) !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: 0 8px 32px rgba(255, 179, 217, 0.3) !important;
+            padding: 1.5rem 0 !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+            border-bottom: 3px solid rgba(255, 179, 217, 0.3) !important;
         }
 
         .header-content {
@@ -38,13 +42,14 @@
         }
 
         .logo {
-            background: linear-gradient(45deg, #ff99cc, #ffcc99);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background: linear-gradient(45deg, #d63384, #ffc107) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
             font-size: 2rem;
-            font-weight: 700;
+            font-weight: 800 !important;
             text-decoration: none;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3)) !important;
         }
 
         .nav-links {
@@ -198,9 +203,11 @@
         }
 
         .btn-small {
-            padding: 0.6rem 1.2rem;
+            padding: 0.8rem 1.5rem;
             font-size: 0.9rem;
             margin-left: 0.5rem;
+            white-space: nowrap;
+            min-width: 80px;
         }
 
         /* 휴대폰 번호 */
@@ -393,12 +400,16 @@
 </head>
 <body>
 <header>
-    <div class="header-content">
-        <a href="index.html" class="logo">KIRBY 도서관</a>
-        <nav class="nav-links">
-            <a href="index.html">홈</a>
-        </nav>
-    </div>
+    <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
+    <nav>
+        <a href="index.html">홈</a>
+        <a href="login.html" id="loginBtn">로그인</a>
+        <a href="signup.html" id="signupBtn">회원가입</a>
+        <a href="books.html">도서목록</a>
+        <a href="board.html">게시판</a>
+        <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
+        <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
+    </nav>
 </header>
 
 <div class="main-container">
@@ -725,6 +736,50 @@
 
         // 실제로는 서버로 데이터 전송 후 로그인 페이지로 리다이렉트
         // window.location.href = 'login.html';
+    });
+
+    // 로그인 상태 관리
+    document.addEventListener('DOMContentLoaded', function () {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mypageBtn = document.getElementById('mypageBtn');
+        const adminBtn = document.getElementById('adminBtn');
+
+        if (isLoggedIn && user) {
+            // 로그인 상태면 로그인 → 로그아웃으로 바꿈
+            loginBtn.textContent = '로그아웃';
+            loginBtn.href = '#';
+            loginBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
+                alert('로그아웃 되었습니다.');
+                window.location.reload();
+            });
+
+            // 회원가입 버튼 숨기기
+            if (signupBtn) signupBtn.style.display = 'none';
+
+            // 마이페이지 버튼 보이기
+            if (mypageBtn) mypageBtn.style.display = 'inline-block';
+
+            // 관리자 계정인 경우 관리자페이지 버튼 보이기
+            if (user.role === 'ADMIN') {
+                if (adminBtn) adminBtn.style.display = 'inline-block';
+            }
+        } else {
+            // 로그인 상태가 아니면 로그인 버튼을 login.html로 연결
+            if (loginBtn) {
+                loginBtn.href = 'login.html';
+            }
+            
+            // 마이페이지, 관리자페이지 버튼 숨기기
+            if (mypageBtn) mypageBtn.style.display = 'none';
+            if (adminBtn) adminBtn.style.display = 'none';
+        }
     });
 </script>
 </body>
