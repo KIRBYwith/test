@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>도서 목록 - KIRBY 도서관</title>
+    <link rel="stylesheet" href="/css/style.css?v=20250118borrow">
+    <script src="/js/numberFormatter.js?v=20250118update"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ffeef5, #fff8e1, #f3e5f5);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.9), rgba(255, 235, 179, 0.9)) !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: 0 8px 32px rgba(255, 179, 217, 0.3) !important;
+            padding: 1.5rem 0 !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+            border-bottom: 3px solid rgba(255, 179, 217, 0.3) !important;
+        }
+        nav a {
+            margin: 0 1rem;
+            text-decoration: none;
+            color: #d63384;
+            font-weight: bold;
+        }
+        .main-container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .page-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d63384;
+            margin-bottom: 2rem;
+        }
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .filters select, .filters input {
+            padding: 0.6rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        .book-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .book-item img {
+            width: 120px;
+            height: 160px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            background: #f0f0f0;
+        }
+        .book-item h3 {
+            font-size: 1rem;
+            margin: 0.3rem 0;
+            color: #d63384;
+            text-align: center;
+        }
+        .book-item p {
+            font-size: 0.85rem;
+            margin: 0.2rem 0;
+            text-align: center;
+        }
+        .book-item button {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .borrow-btn {
+            background: #ff69b4;
+            color: #fff;
+        }
+        .disabled-btn {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
+    <nav>
+        <a href="index.html">홈</a>
+        <a href="login.html" id="loginBtn">로그인</a>
+        <a href="signup.html" id="signupBtn">회원가입</a>
+        <a href="books.html">도서목록</a>
+        <a href="board.html">게시판</a>
+        <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
+        <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
+    </nav>
+</header>
+
+<div class="main-container">
+    <h2 class="page-title">📚 도서 목록</h2>
+
+    <div class="filters">
+        <select id="categoryFilter">
+            <option value="">전체 카테고리</option>
+            <option value="철학">철학</option>
+            <option value="종교">종교</option>
+            <option value="사회과학">사회과학</option>
+            <option value="순수과학">순수과학</option>
+            <option value="기술과학">기술과학</option>
+            <option value="예술">예술</option>
+            <option value="어학">어학</option>
+            <option value="문학">문학</option>
+            <option value="역사">역사</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="책 제목 또는 저자 검색">
+    </div>
+
+    <div class="book-list" id="bookList"></div>
+</div>
+
+<script>
+    // state helper
+    const s = document.createElement('script');
+    s.src = '/js/state.js';
+    document.head.appendChild(s);
+
+    // 로그인 상태 관리
+    document.addEventListener('DOMContentLoaded', function () {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mypageBtn = document.getElementById('mypageBtn');
+        const adminBtn = document.getElementById('adminBtn');
+
+        if (isLoggedIn && user) {
+            // 로그인 상태면 로그인 → 로그아웃으로 바꿈
+            loginBtn.textContent = '로그아웃';
+            loginBtn.href = '#';
+            loginBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
+                alert('로그아웃 되었습니다.');
+                window.location.reload();
+            });
+
+            // 회원가입 버튼 숨기기
+            if (signupBtn) signupBtn.style.display = 'none';
+
+            // 마이페이지 버튼 보이기
+            if (mypageBtn) mypageBtn.style.display = 'inline-block';
+
+            // 관리자 계정인 경우 관리자페이지 버튼 보이기
+            if (user.role === 'ADMIN') {
+                if (adminBtn) adminBtn.style.display = 'inline-block';
+            }
+        } else {
+            // 로그인 상태가 아니면 로그인 버튼을 login.html로 연결
+            if (loginBtn) {
+                loginBtn.href = 'login.html';
+            }
+            
+            // 마이페이지, 관리자페이지 버튼 숨기기
+            if (mypageBtn) mypageBtn.style.display = 'none';
+            if (adminBtn) adminBtn.style.display = 'none';
+        }
+    });
+
+    // CSV 데이터 → JS 배열
+    const books = [
+        { id:1, title:"달콤한 나의 도시", author:"정이현", publisher:"문학과 지성사", year:"2007", code:"813.6 정398ㄷ" },
+        { id:2, title:"1리터의 눈물", author:"키토아야", publisher:"이덴슬리벨", year:"2011", code:"836 키673ㅇ" },
+        { id:3, title:"청소부 밥", author:"홉킨스, 토드", publisher:"위즈덤하우스", year:"2010", code:"325.04 토622ㅊ" },
+        { id:4, title:"마시멜로 이야기", author:"포사다, 호아킴 데", publisher:"한국경제신문", year:"2010", code:"325.04 호397ㅁ" },
+        { id:6, title:"퀴즈 쇼", author:"김영하", publisher:"문학동네", year:"2008", code:"813.6 김687ㅋ" },
+        { id:20, title:"재미있는 영양이야기", author:"김현숙", publisher:"교문사", year:"2009", code:"594.1 김953ㅈ" },
+        { id:30, title:"일본. 1 : 떠나기 전에", author:"심청보", publisher:"삼성출판사", year:"2011", code:"981.302 심956ㅇ" }
+        // 👉 실제로는 네 CSV 전체 데이터를 여기에 넣으면 됨
+    ];
+
+    // 카테고리 매핑 함수
+    function getCategory(code) {
+        const num = parseInt(code);
+        if (num >= 900) return "역사";
+        if (num >= 800) return "문학";
+        if (num >= 700) return "어학";
+        if (num >= 600) return "예술";
+        if (num >= 500) return "기술과학";
+        if (num >= 400) return "순수과학";
+        if (num >= 300) return "사회과학";
+        if (num >= 200) return "종교";
+        if (num >= 100) return "철학";
+        return "기타";
+    }
+
+    // 상태 보전: 저장소 기준으로 상태 결정
+    books.forEach(book => {
+        book.category = getCategory(book.code);
+    });
+
+    const bookList = document.getElementById('bookList');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const searchInput = document.getElementById('searchInput');
+
+    function renderBooks() {
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const state = (window.State && State.getBookState()) || {};
+        const category = categoryFilter.value;
+        const search = searchInput.value.toLowerCase();
+        bookList.innerHTML = '';
+
+        books.filter(b =>
+            (category === "" || b.category === category) &&
+            (b.title.toLowerCase().includes(search) || b.author.toLowerCase().includes(search))
+        ).forEach(book => {
+            const div = document.createElement('div');
+            div.className = "book-item";
+
+            const status = (state[book.id]?.status) || '대출가능';
+
+            div.innerHTML = `
+                <img src="../img/${book.id}.jpg" alt="${book.title}">
+                <h3>${book.title}</h3>
+                <p>저자: ${book.author}</p>
+                <p>출판사: ${book.publisher} (${book.year})</p>
+                <p>카테고리: ${book.category}</p>
+                <p>상태: ${status}</p>
+            `;
+
+            const buttonGroup = document.createElement('div');
+            buttonGroup.className = 'button-group';
+
+            if (status === "대출가능") {
+                const btn = document.createElement('button');
+                btn.className = "borrow-btn";
+                btn.textContent = "대출하기";
+                btn.addEventListener('click', () => {
+                    if (!isLoggedIn) {
+                        alert("로그인 후 이용 가능합니다.");
+                        return;
+                    }
+                    // 대출 처리
+                    const u = JSON.parse(localStorage.getItem('user'));
+                    const st = State.getBookState();
+                    if ((st[book.id]?.status) === '대출중') {
+                        alert('이미 대출중인 도서입니다.');
+                        renderBooks();
+                        return;
+                    }
+                    State.setBookLoan(book.id, u.email);
+                    u.loans = Array.from(new Set([...(u.loans||[]), book.id]));
+                    localStorage.setItem('user', JSON.stringify(u));
+                    State.awardPoints(u, 10);
+                    alert('대출 완료! (+10포인트)');
+                    renderBooks();
+                });
+                buttonGroup.appendChild(btn);
+            } else {
+                // 대출중 상태: 대출하기 버튼을 비활성화로 표시
+                const disabled = document.createElement('button');
+                disabled.className = "disabled-btn";
+                disabled.textContent = "대출하기";
+                disabled.disabled = true;
+                buttonGroup.appendChild(disabled);
+
+                // 예약하기 버튼 추가
+                const reserveBtn = document.createElement('button');
+                reserveBtn.className = "borrow-btn";
+                reserveBtn.textContent = "예약하기";
+                reserveBtn.addEventListener('click', () => {
+                    if (!isLoggedIn) {
+                        alert('로그인 후 이용 가능합니다.');
+                        return;
+                    }
+                    // 예약 처리
+                    const u = JSON.parse(localStorage.getItem('user'));
+                    const st = State.getBookState();
+
+                    // 이미 예약했는지 확인
+                    const reservations = st[book.id]?.reservations || [];
+                    if (reservations.includes(u.email)) {
+                        alert('이미 예약하신 도서입니다.');
+                        return;
+                    }
+
+                    // 예약 추가
+                    State.addReservation(book.id, u.email);
+                    u.reservations = Array.from(new Set([...(u.reservations||[]), book.id]));
+                    localStorage.setItem('user', JSON.stringify(u));
+
+                    alert('예약이 완료되었습니다!');
+                    renderBooks();
+                });
+                buttonGroup.appendChild(reserveBtn);
+            }
+
+            div.appendChild(buttonGroup);
+            bookList.appendChild(div);
+        });
+    }
+
+    categoryFilter.addEventListener('change', renderBooks);
+    searchInput.addEventListener('input', renderBooks);
+
+    // 초기 보정: 책 상태 엔트리 생성
+    (function init() {
+        if (window.State) {
+            State.ensureBookState(books.map(b=>b.id));
+        }
+        renderBooks();
+    })();
+</script>
+</body>
+</html>

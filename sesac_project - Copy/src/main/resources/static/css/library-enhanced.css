@@ -19,19 +19,19 @@
     align-items: center;
     gap: 1.5rem;
     transition: all 0.3s ease;
-    border: 2px solid rgba(255, 179, 217, 0.2);
+    border: 2px solid rgba(212, 175, 55, 0.2);
 }
 
 .service-item-large:hover {
     transform: translateY(-5px);
     background: rgba(255, 255, 255, 0.8);
-    border-color: var(--accent-pink);
-    box-shadow: 0 15px 30px rgba(255, 179, 217, 0.3);
+    border-color: var(--star-gold);
+    box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3);
 }
 
 .service-icon-large {
     font-size: 3rem;
-    background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
+    background: linear-gradient(135deg, var(--star-gold), var(--accent-amber));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -52,7 +52,7 @@
 }
 
 .service-link {
-    color: var(--accent-pink);
+    color: var(--primary-navy);
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
@@ -60,13 +60,71 @@
 }
 
 .service-link:hover {
-    color: var(--accent-yellow);
+    color: var(--star-gold);
     transform: translateX(5px);
 }
 
 /* 추천 도서 카드 */
 .featured-books-card {
     grid-column: 1 / -1;
+}
+
+/* 유튜브 동영상 섹션 */
+.youtube-card {
+    grid-column: 1 / -1;
+    margin-top: 2rem;
+}
+
+.youtube-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.youtube-item {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(212, 175, 55, 0.2);
+}
+
+.youtube-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.8);
+    border-color: var(--star-gold);
+    box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3);
+}
+
+.youtube-thumbnail {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.youtube-thumbnail iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 15px;
+}
+
+.youtube-info h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-navy);
+    margin-bottom: 0.8rem;
+}
+
+.youtube-info p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 .featured-books-grid {
@@ -83,14 +141,14 @@
     align-items: center;
     gap: 1rem;
     transition: all 0.3s ease;
-    border: 2px solid rgba(255, 179, 217, 0.2);
+    border: 2px solid rgba(26, 54, 93, 0.2);
 }
 
 .featured-book:hover {
     transform: translateY(-3px);
     background: rgba(255, 255, 255, 0.8);
-    border-color: var(--accent-pink);
-    box-shadow: 0 10px 25px rgba(255, 179, 217, 0.3);
+    border-color: var(--primary-navy);
+    box-shadow: 0 10px 25px rgba(26, 54, 93, 0.3);
 }
 
 .book-rank {
@@ -136,13 +194,13 @@
     align-items: center;
     gap: 1rem;
     transition: all 0.3s ease;
-    border-left: 4px solid var(--light-pink);
+    border-left: 4px solid var(--light-navy);
 }
 
 .notice-item:hover {
     transform: translateX(5px);
     background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 20px rgba(255, 179, 217, 0.2);
+    box-shadow: 0 8px 20px rgba(26, 54, 93, 0.2);
 }
 
 .notice-item.urgent {
@@ -158,7 +216,7 @@
 }
 
 .notice-badge {
-    background: var(--accent-pink);
+    background: var(--primary-navy);
     color: white;
     padding: 0.3rem 0.8rem;
     border-radius: 12px;
@@ -199,7 +257,7 @@
 
 /* 하단 정보 섹션 */
 .info-section {
-    background: linear-gradient(135deg, rgba(255, 179, 217, 0.05), rgba(255, 235, 179, 0.05));
+    background: linear-gradient(135deg, rgba(26, 54, 93, 0.05), rgba(139, 21, 56, 0.05));
     padding: 3rem 0;
     margin-top: 3rem;
     border-radius: 30px;
@@ -219,14 +277,14 @@
     border-radius: 20px;
     padding: 2rem;
     backdrop-filter: blur(15px);
-    border: 2px solid rgba(255, 179, 217, 0.2);
+    border: 2px solid rgba(26, 54, 93, 0.2);
     transition: all 0.3s ease;
 }
 
 .info-card:hover {
     transform: translateY(-5px);
     background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 15px 30px rgba(255, 179, 217, 0.2);
+    box-shadow: 0 15px 30px rgba(26, 54, 93, 0.2);
 }
 
 .info-card h3 {
@@ -249,7 +307,7 @@
     border-radius: 10px;
     font-size: 0.95rem;
     transition: all 0.3s ease;
-    border-left: 3px solid var(--light-pink);
+    border-left: 3px solid var(--light-navy);
 }
 
 .search-rank:hover {
@@ -279,7 +337,7 @@
 }
 
 .map-link {
-    color: var(--accent-pink);
+    color: var(--primary-navy);
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
@@ -287,7 +345,7 @@
 }
 
 .map-link:hover {
-    color: var(--accent-yellow);
+    color: var(--accent-gold);
     transform: translateX(5px);
 }
 

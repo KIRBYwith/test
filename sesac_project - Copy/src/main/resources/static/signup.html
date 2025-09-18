@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KIRBY 도서관 - 회원가입</title>
     <link rel="stylesheet" href="/css/style.css?v=20250118update">
+    <link rel="stylesheet" href="/css/events-footer.css?v=20250118events">
     <style>
         * {
             margin: 0;
@@ -13,23 +14,23 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ffeef5 0%, #fff8e1 50%, #f3e5f5 100%);
+            font-family: 'Georgia', 'Times New Roman', 'Apple SD Gothic Neo', 'Noto Sans KR', serif;
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--deep-navy) 30%, var(--star-gold) 70%, var(--pale-gold) 100%);
             min-height: 100vh;
-            color: #333;
+            color: var(--text-primary);
             line-height: 1.6;
         }
 
         /* 헤더 오버라이드 - 통일된 스타일 사용 */
         header {
-            background: linear-gradient(135deg, rgba(255, 179, 217, 0.9), rgba(255, 235, 179, 0.9)) !important;
+            background: linear-gradient(135deg, rgba(26, 35, 126, 0.9), rgba(212, 175, 55, 0.9)) !important;
             backdrop-filter: blur(20px) !important;
-            box-shadow: 0 8px 32px rgba(255, 179, 217, 0.3) !important;
+            box-shadow: 0 8px 32px rgba(26, 35, 126, 0.3) !important;
             padding: 1.5rem 0 !important;
             position: sticky !important;
             top: 0 !important;
             z-index: 1000 !important;
-            border-bottom: 3px solid rgba(255, 179, 217, 0.3) !important;
+            border-bottom: 3px solid rgba(212, 175, 55, 0.3) !important;
         }
 
         .header-content {
@@ -42,7 +43,7 @@
         }
 
         .logo {
-            background: linear-gradient(45deg, #d63384, #ffc107) !important;
+            background: linear-gradient(45deg, var(--star-gold), var(--accent-amber)) !important;
             -webkit-background-clip: text !important;
             -webkit-text-fill-color: transparent !important;
             background-clip: text !important;
@@ -59,21 +60,22 @@
 
         .nav-links a {
             text-decoration: none;
-            color: #d63384;
+            color: var(--text-primary);
             font-weight: 600;
             padding: 0.5rem 1rem;
             border-radius: 20px;
             transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .nav-links a:hover {
-            background: linear-gradient(45deg, #ffb3d9, #ffeb99);
-            color: white;
+            background: linear-gradient(45deg, var(--star-gold), var(--accent-amber));
+            color: var(--white);
         }
 
         /* 메인 컨테이너 */
         .main-container {
-            max-width: 800px;
+            max-width: 100%;
             margin: 2rem auto;
             padding: 0 2rem;
         }
@@ -96,12 +98,12 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #ffb3d9, #ffeb99);
+            background: linear-gradient(90deg, var(--star-gold), var(--accent-amber));
         }
 
         .page-title {
             text-align: center;
-            color: #d63384;
+            color: var(--primary-navy);
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
@@ -133,7 +135,7 @@
         .form-label {
             display: block;
             margin-bottom: 0.8rem;
-            color: #d63384;
+            color: var(--primary-navy);
             font-weight: 600;
             font-size: 1rem;
         }
@@ -154,7 +156,7 @@
 
         .form-input:focus {
             outline: none;
-            border-color: #ffb3d9;
+            border-color: var(--star-gold);
             background: white;
             box-shadow: 0 5px 15px rgba(255, 179, 217, 0.2);
         }
@@ -181,20 +183,20 @@
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #ffb3d9, #ffeb99);
-            color: #d63384;
+            background: linear-gradient(45deg, var(--star-gold), var(--accent-amber));
+            color: var(--white);
             border: 2px solid rgba(255, 179, 217, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 179, 217, 0.4);
-            background: linear-gradient(45deg, #ff99cc, #ffe066);
+            background: linear-gradient(45deg, var(--light-pink), var(--light-yellow));
         }
 
         .btn-secondary {
             background: rgba(255, 179, 217, 0.1);
-            color: #d63384;
+            color: var(--primary-navy);
             border: 2px solid rgba(255, 179, 217, 0.3);
         }
 
@@ -223,7 +225,7 @@
         }
 
         .phone-dash {
-            color: #d63384;
+            color: var(--primary-navy);
             font-weight: bold;
             font-size: 1.2rem;
         }
@@ -272,7 +274,7 @@
         }
 
         .notice h4 {
-            color: #d63384;
+            color: var(--primary-navy);
             margin-bottom: 1rem;
             font-size: 1.1rem;
         }
@@ -290,7 +292,7 @@
 
         .notice li::before {
             content: '•';
-            color: #ffb3d9;
+            color: var(--star-gold);
             font-size: 1.2rem;
             position: absolute;
             left: 0;
@@ -305,7 +307,7 @@
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #d63384, #ff6b9d);
+            background: linear-gradient(45deg, var(--star-gold), var(--accent-amber));
             color: white;
             font-size: 1.3rem;
             font-weight: 700;
@@ -314,13 +316,13 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 179, 217, 0.3);
         }
 
         .submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(214, 51, 132, 0.4);
-            background: linear-gradient(45deg, #c2185b, #e91e63);
+            box-shadow: 0 15px 40px rgba(255, 179, 217, 0.4);
+            background: linear-gradient(45deg, var(--star-gold), var(--accent-amber));
         }
 
         /* 메시지 */
@@ -401,15 +403,16 @@
 <body>
 <header>
     <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
-    <nav>
-        <a href="index.html">홈</a>
-        <a href="login.html" id="loginBtn">로그인</a>
-        <a href="signup.html" id="signupBtn">회원가입</a>
-        <a href="books.html">도서목록</a>
-        <a href="board.html">게시판</a>
-        <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
-        <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
-    </nav>
+        <nav>
+            <a href="index.html">홈</a>
+            <a href="signup.html" id="signupBtn">회원가입</a>
+            <a href="books.html">도서목록</a>
+            <a href="board.html">게시판</a>
+            <a href="login.html" id="loginBtn">로그인</a>
+            <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
+            <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
+            <a href="#" id="logoutBtn" onclick="logout()" style="display:none;">로그아웃</a>
+        </nav>
 </header>
 
 <div class="main-container">
@@ -546,7 +549,7 @@
                     <li><strong>선택사항:</strong> SMS/이메일 수신동의 (거부 시에도 회원가입 가능)</li>
                 </ul>
                 <br>
-                <p style="color: #d63384; font-weight: 600;">
+                <p style="color: var(--accent-coral); font-weight: 600;">
                     📋 도서서비스(대출/반납, 예약, 연체알림)와 관련된 안내는 수신동의 여부와 관계없이 발송됩니다.<br>
                     📋 신청하신 프로그램(신청완료, 취소 등)과 관련된 안내는 수신동의 여부와 관계없이 발송됩니다.
                 </p>
@@ -557,7 +560,7 @@
                 <div class="checkbox-group">
                     <input type="checkbox" id="requiredConsent" name="requiredConsent" class="checkbox" required>
                     <label for="requiredConsent" class="checkbox-label">
-                        <strong style="color: #d63384;">개인정보 수집 및 이용에 동의합니다. (필수)</strong>
+                        <strong style="color: var(--accent-coral);">개인정보 수집 및 이용에 동의합니다. (필수)</strong>
                     </label>
                 </div>
             </div>
@@ -781,6 +784,108 @@
             if (adminBtn) adminBtn.style.display = 'none';
         }
     });
+
+    // 로그아웃 기능
+    function logout() {
+        if (confirm('정말 로그아웃 하시겠습니까?')) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('user');
+            alert('로그아웃 되었습니다.');
+            location.reload();
+        }
+    }
+
+    // 로그인 상태 체크 및 헤더 업데이트
+    function updateHeaderForLogin() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mypageBtn = document.getElementById('mypageBtn');
+        const adminBtn = document.getElementById('adminBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        if (isLoggedIn) {
+            // 로그인된 상태
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (signupBtn) signupBtn.style.display = 'none';
+            if (mypageBtn) mypageBtn.style.display = 'inline-block';
+            if (logoutBtn) logoutBtn.style.display = 'inline-block';
+            
+            // 관리자 체크
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.role === 'ADMIN' && adminBtn) {
+                adminBtn.style.display = 'inline-block';
+            }
+        } else {
+            // 로그인되지 않은 상태
+            if (loginBtn) loginBtn.style.display = 'inline-block';
+            if (signupBtn) signupBtn.style.display = 'inline-block';
+            if (mypageBtn) mypageBtn.style.display = 'none';
+            if (adminBtn) adminBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+        }
+    }
+
+    // 페이지 로드 시 헤더 업데이트
+    document.addEventListener('DOMContentLoaded', function() {
+        updateHeaderForLogin();
+    });
 </script>
+
+<!-- 푸터 -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-main">
+            <div class="footer-section">
+                <h4>📚 KIRBY 도서관</h4>
+                <p>지식과 꿈이 만나는 공간</p>
+                <div class="footer-contact">
+                    <p><strong>주소:</strong> 서울시 강남구 도서관로 123</p>
+                    <p><strong>전화:</strong> 02-1234-5678</p>
+                    <p><strong>이메일:</strong> info@kirbylibrary.kr</p>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>🔗 빠른 링크</h4>
+                <ul>
+                    <li><a href="booklist.html">도서목록</a></li>
+                    <li><a href="board.html">게시판</a></li>
+                    <li><a href="login.html">로그인</a></li>
+                    <li><a href="signup.html">회원가입</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>📖 서비스</h4>
+                <ul>
+                    <li><a href="#">도서 대출</a></li>
+                    <li><a href="#">예약 서비스</a></li>
+                    <li><a href="#">독서 모임</a></li>
+                    <li><a href="#">문화 행사</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>📞 문의</h4>
+                <ul>
+                    <li><a href="#">자주 묻는 질문</a></li>
+                    <li><a href="#">이용 안내</a></li>
+                    <li><a href="#">개인정보처리방침</a></li>
+                    <li><a href="#">이용약관</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-info">
+                <p>© 2025 KIRBY 도서관. All rights reserved.</p>
+                <p>사업자등록번호: 123-45-67890 | 대표: 김도서</p>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">📷</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">📺</a>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지 - KIRBY 도서관</title>
+    <link rel="stylesheet" href="/css/style.css?v=20250118update">
+    <style>
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+        .card { background: rgba(255,255,255,0.9); padding: 1rem; border-radius: 12px; }
+        .card h3 { color: #d63384; margin-bottom: .5rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border-bottom: 1px solid #ffb3d9; padding: .5rem; text-align: left; }
+        .btn { padding: .4rem .8rem; border: 0; border-radius: 6px; background: #ff69b4; color: #fff; cursor: pointer; }
+        .btn-outline { background:#fff; color:#d63384; border:2px solid #ffb3d9; }
+        header {
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.9), rgba(255, 235, 179, 0.9)) !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: 0 8px 32px rgba(255, 179, 217, 0.3) !important;
+            padding: 1.5rem 0 !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+            border-bottom: 3px solid rgba(255, 179, 217, 0.3) !important;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
+    <nav>
+        <a href="index.html">홈</a>
+        <a href="login.html" id="loginBtn">로그인</a>
+        <a href="signup.html" id="signupBtn">회원가입</a>
+        <a href="books.html">도서목록</a>
+        <a href="board.html">게시판</a>
+        <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
+        <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h2>관리자 페이지</h2>
+    <p class="small">간단한 로컬 상태 기반 관리 화면입니다.</p>
+
+    <div class="grid">
+        <section class="card">
+            <h3>대출 현황</h3>
+            <table>
+                <thead><tr><th>도서ID</th><th>상태</th><th>대출자</th><th>조치</th></tr></thead>
+                <tbody id="loanTbody"></tbody>
+            </table>
+        </section>
+        <section class="card">
+            <h3>예약 큐</h3>
+            <table>
+                <thead><tr><th>도서ID</th><th>예약자 목록</th></tr></thead>
+                <tbody id="reserveTbody"></tbody>
+            </table>
+        </section>
+        <section class="card">
+            <h3>포인트 교환 신청</h3>
+            <table>
+                <thead><tr><th>ID</th><th>사용자</th><th>포인트</th><th>상태</th><th>승인</th></tr></thead>
+                <tbody id="exchangeTbody"></tbody>
+            </table>
+        </section>
+    </div>
+
+    <div style="margin-top:1rem">
+        <a class="btn btn-outline" href="index.html">메인으로</a>
+    </div>
+</main>
+
+<script>
+    // 로그인 상태 관리
+    document.addEventListener('DOMContentLoaded', function () {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mypageBtn = document.getElementById('mypageBtn');
+        const adminBtn = document.getElementById('adminBtn');
+
+        if (isLoggedIn && user) {
+            // 로그인 상태면 로그인 → 로그아웃으로 바꿈
+            loginBtn.textContent = '로그아웃';
+            loginBtn.href = '#';
+            loginBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
+                alert('로그아웃 되었습니다.');
+                window.location.href = 'index.html';
+            });
+
+            // 회원가입 버튼 숨기기
+            if (signupBtn) signupBtn.style.display = 'none';
+
+            // 마이페이지 버튼 보이기
+            if (mypageBtn) mypageBtn.style.display = 'inline-block';
+
+            // 관리자 계정인 경우 관리자페이지 버튼 보이기
+            if (user.role === 'ADMIN') {
+                if (adminBtn) adminBtn.style.display = 'inline-block';
+            }
+        } else {
+            // 로그인 상태가 아니면 로그인 버튼을 login.html로 연결
+            if (loginBtn) {
+                loginBtn.href = 'login.html';
+            }
+            
+            // 마이페이지, 관리자페이지 버튼 숨기기
+            if (mypageBtn) mypageBtn.style.display = 'none';
+            if (adminBtn) adminBtn.style.display = 'none';
+        }
+    });
+
+    // 접근 제어: 관리자만
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user || user.role !== 'ADMIN') {
+        alert('관리자 전용 페이지입니다.');
+        window.location.href = 'index.html';
+    }
+
+    const loanTbody = document.getElementById('loanTbody');
+    const reserveTbody = document.getElementById('reserveTbody');
+    const exchangeTbody = document.getElementById('exchangeTbody');
+
+    function render() {
+        const bookStatus = JSON.parse(localStorage.getItem('bookStatus') || '{}');
+        loanTbody.innerHTML = '';
+        Object.entries(bookStatus).forEach(([id, s]) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${id}</td><td>${s.status}</td><td>${s.loanedBy||''}</td><td>${s.status==='대출중'?'<button class=\'btn\' data-return="'+id+'">반납처리</button>':''}</td>`;
+            loanTbody.appendChild(tr);
+        });
+
+        const queues = JSON.parse(localStorage.getItem('reservationQueues') || '{}');
+        reserveTbody.innerHTML = '';
+        Object.entries(queues).forEach(([id, arr]) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${id}</td><td>${(arr||[]).join(', ')}</td>`;
+            reserveTbody.appendChild(tr);
+        });
+
+        const requests = JSON.parse(localStorage.getItem('exchangeRequests') || '[]');
+        exchangeTbody.innerHTML = '';
+        requests.forEach(r => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${r.id}</td><td>${r.name} (${r.email})</td><td>${r.pointsUsed}</td><td>${r.status}</td><td>${r.status==='pending'?'<button class=\'btn\' data-approve="'+r.id+'">승인</button>':''}</td>`;
+            exchangeTbody.appendChild(tr);
+        });
+
+        // 이벤트 바인딩
+        loanTbody.querySelectorAll('button[data-return]').forEach(b => {
+            b.addEventListener('click', () => {
+                const id = parseInt(b.getAttribute('data-return'));
+                const st = JSON.parse(localStorage.getItem('bookStatus')||'{}');
+                st[id] = { status: '대출가능' };
+                localStorage.setItem('bookStatus', JSON.stringify(st));
+                render();
+            });
+        });
+
+        exchangeTbody.querySelectorAll('button[data-approve]').forEach(b => {
+            b.addEventListener('click', () => {
+                const id = parseInt(b.getAttribute('data-approve'));
+                const list = JSON.parse(localStorage.getItem('exchangeRequests') || '[]');
+                const idx = list.findIndex(x => x.id === id);
+                if (idx !== -1) {
+                    list[idx].status = 'approved';
+                    localStorage.setItem('exchangeRequests', JSON.stringify(list));
+                    alert('승인 완료');
+                    render();
+                }
+            });
+        });
+    }
+
+    render();
+</script>
+</body>
+</html>
+
+

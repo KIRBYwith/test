@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - KIRBY 도서관</title>
+    <link rel="stylesheet" href="/css/style.css?v=20250118admin">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" class="logo-link">📖KIRBY 도서관📖</a></h1>
+        <nav>
+            <a href="index.html">홈</a>
+            <a href="login.html" id="loginBtn">로그인</a>
+            <a href="signup.html" id="signupBtn">회원가입</a>
+            <a href="books.html">도서목록</a>
+            <a href="board.html">게시판</a>
+            <a href="mypage.html" id="mypageBtn" style="display:none;">마이페이지</a>
+            <a href="admin.html" id="adminBtn" style="display:none; background-color: #ff6b6b; color: white; padding: 5px 10px; border-radius: 5px;">관리자페이지</a>
+        </nav>
+    </header>
+
+    <div class="auth-container">
+        <div class="auth-form">
+            <div class="auth-header">
+                <h2>🔐 로그인</h2>
+                <p>KIRBY 도서관에 오신 것을 환영합니다!</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">아이디</label>
+                    <input type="text" id="username" name="username" required placeholder="아이디를 입력하세요">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" required placeholder="비밀번호를 입력하세요">
+                </div>
+                
+                <button type="submit" class="btn-primary">로그인</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>아직 회원이 아니신가요? <a href="signup.html">회원가입</a></p>
+                <p><a href="index.html">홈으로 돌아가기</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // 간단한 로그인 로직 (실제로는 서버와 통신)
+            if (username && password) {
+                // 관리자 계정 확인
+                if (username === 'admin' && password === 'admin') {
+                    const user = {
+                        id: 1,
+                        username: username,
+                        email: 'admin@library.com',
+                        role: 'ADMIN',
+                        loans: [],
+                        reservations: [],
+                        points: 1000
+                    };
+                    
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('user', JSON.stringify(user));
+                    
+                    alert('관리자로 로그인 성공!');
+                    window.location.href = 'admin.html';
+                } else {
+                    // 일반 사용자 로그인 시뮬레이션
+                    const user = {
+                        id: 2,
+                        username: username,
+                        email: username + '@library.com',
+                        role: 'USER',
+                        loans: [],
+                        reservations: [],
+                        points: 0
+                    };
+                    
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('user', JSON.stringify(user));
+                    
+                    alert('로그인 성공!');
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert('아이디와 비밀번호를 입력해주세요.');
+            }
+        });
+
+        // 로그인 상태 확인
+        document.addEventListener('DOMContentLoaded', function () {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            const mypageBtn = document.getElementById('mypageBtn');
+            const adminBtn = document.getElementById('adminBtn');
+
+            if (isLoggedIn && user) {
+                // 이미 로그인된 상태면 홈으로 리다이렉트
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
